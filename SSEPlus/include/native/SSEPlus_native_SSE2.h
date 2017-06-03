@@ -44,11 +44,13 @@ SSP_FORCEINLINE __m128d ssp_add_sd_SSE2( __m128d a, __m128d b )
 {
     return _mm_add_sd( a, b );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_add_si64} */ 
 SSP_FORCEINLINE __m64 ssp_add_si64_SSE2( __m64 a, __m64 b)
 {
     return _mm_add_si64( a, b );
 }
+#endif
 /** \SSE2{Native,_mm_adds_epi16} */ 
 SSP_FORCEINLINE __m128i ssp_adds_epi16_SSE2( __m128i a, __m128i b )
 {
@@ -351,21 +353,25 @@ SSP_FORCEINLINE __m128i ssp_cvtpd_epi32_SSE2( __m128d a )
 {
     return _mm_cvtpd_epi32( a );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_cvtpd_pi32} */ 
 SSP_FORCEINLINE __m64 ssp_cvtpd_pi32_SSE2( __m128d a )
 {
     return _mm_cvtpd_pi32( a );
 }
+#endif
 /** \SSE2{Native,_mm_cvtpd_ps} */ 
 SSP_FORCEINLINE __m128 ssp_cvtpd_ps_SSE2( __m128d a )
 {
     return _mm_cvtpd_ps( a );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_cvtpi32_pd} */ 
 SSP_FORCEINLINE __m128d ssp_cvtpi32_pd_SSE2( __m64 a )
 {
     return _mm_cvtpi32_pd( a );
 }
+#endif
 /** \SSE2{Native,_mm_cvtps_epi32} */ 
 SSP_FORCEINLINE __m128i ssp_cvtps_epi32_SSE2( __m128 a )
 {
@@ -448,11 +454,13 @@ SSP_FORCEINLINE __m128i ssp_cvttpd_epi32_SSE2( __m128d a )
 {
     return _mm_cvttpd_epi32( a );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_cvttpd_pi32} */ 
 SSP_FORCEINLINE __m64 ssp_cvttpd_pi32_SSE2( __m128d a )
 {
     return _mm_cvttpd_pi32( a );
 }
+#endif
 /** \SSE2{Native,_mm_cvttps_epi32} */ 
 SSP_FORCEINLINE __m128i ssp_cvttps_epi32_SSE2( __m128 a )
 {
@@ -627,6 +635,7 @@ SSP_FORCEINLINE int ssp_movemask_pd_SSE2( __m128d a )
 {
     return _mm_movemask_pd( a );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_movepi64_pi64} */ 
 SSP_FORCEINLINE __m64 ssp_movepi64_pi64_SSE2( __m128i a )
 {
@@ -637,6 +646,7 @@ SSP_FORCEINLINE __m128i ssp_movpi64_epi64_SSE2( __m64 a )
 {
     return _mm_movpi64_epi64( a );
 }
+#endif
 /** \SSE2{Native,_mm_mul_epu32} */ 
 SSP_FORCEINLINE __m128i ssp_mul_epu32_SSE2( __m128i a, __m128i b )
 {
@@ -652,11 +662,13 @@ SSP_FORCEINLINE __m128d ssp_mul_sd_SSE2( __m128d a, __m128d b )
 {
     return _mm_mul_sd( a, b );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_mul_su32} */ 
 SSP_FORCEINLINE __m64 ssp_mul_su32_SSE2( __m64 a, __m64 b)
 {
     return _mm_mul_su32( a, b );
 }
+#endif
 /** \SSE2{Native,_mm_mulhi_epi16} */ 
 SSP_FORCEINLINE __m128i ssp_mulhi_epi16_SSE2( __m128i a, __m128i b )
 {
@@ -717,11 +729,13 @@ SSP_FORCEINLINE __m128i ssp_set_epi32_SSE2( int i3, int i2, int i1, int i0 )
 {
     return _mm_set_epi32( i3, i2, i1, i0 );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_set_epi64} */ 
 SSP_FORCEINLINE __m128i ssp_set_epi64_SSE2( __m64 a1, __m64 a0 )
 {
     return _mm_set_epi64( a1, a0 );
 }
+#endif
 /** \SSE2{Native,_mm_set_epi8} */ 
 SSP_FORCEINLINE __m128i ssp_set_epi8_SSE2( char b15, char b14, char b13, char b12, char b11, char b10, char b9, char b8, char b7, char b6, char b5, char b4, char b3, char b2, char b1, char b0 )
 {
@@ -747,11 +761,13 @@ SSP_FORCEINLINE __m128i ssp_set1_epi32_SSE2( int i )
 {
     return _mm_set1_epi32( i );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_set1_epi64} */ 
 SSP_FORCEINLINE __m128i ssp_set1_epi64_SSE2( __m64 a )
 {
     return _mm_set1_epi64( a );
 }
+#endif
 /** \SSE2{Native,_mm_set1_epi8} */ 
 SSP_FORCEINLINE __m128i ssp_set1_epi8_SSE2( char b )
 {
@@ -780,11 +796,13 @@ SSP_FORCEINLINE __m128i ssp_setr_epi32_SSE2( int i0, int i1, int i2, int i3)
 {
     return _mm_setr_epi32( i0, i1, i2, i3);
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_setr_epi64} */ 
 SSP_FORCEINLINE __m128i ssp_setr_epi64_SSE2( __m64 a0, __m64 a1)
 {
     return _mm_setr_epi64( a0, a1);
 }
+#endif
 /** \SSE2{Native,_mm_setr_epi8} */ 
 SSP_FORCEINLINE __m128i ssp_setr_epi8_SSE2( char b15, char b14, char b13, char b12, char b11, char b10, char b9, char b8, char b7, char b6, char b5, char b4, char b3, char b2, char b1, char b0 )
 {
@@ -1038,11 +1056,13 @@ SSP_FORCEINLINE __m128d ssp_sub_sd_SSE2( __m128d a, __m128d b )
 {
     return _mm_sub_sd( a, b );
 }
+#if defined(SYS32)
 /** \SSE2{Native,_mm_sub_si64} */ 
 SSP_FORCEINLINE __m64 ssp_sub_si64_SSE2( __m64 a, __m64 b)
 {
     return _mm_sub_si64( a, b );
 }
+#endif
 /** \SSE2{Native,_mm_subs_epi16} */ 
 SSP_FORCEINLINE __m128i ssp_subs_epi16_SSE2( __m128i a, __m128i b )
 {

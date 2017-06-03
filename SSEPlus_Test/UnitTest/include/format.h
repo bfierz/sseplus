@@ -5,6 +5,7 @@
 #ifndef __FORMAT_H__
 #define __FORMAT_H__
 #include "../../../SSEPlus/include/SSEPlus_base.h"
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <sstream>

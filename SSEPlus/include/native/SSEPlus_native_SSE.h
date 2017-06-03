@@ -371,11 +371,13 @@ SSP_FORCEINLINE int ssp_cvt_ss2si_SSE( __m128 a )
     return _mm_cvt_ss2si( a );
 }
 
+#if defined(SYS32)
 /** \SSE{Native,_mm_cvt_ps2pi} */
 SSP_FORCEINLINE __m64 ssp_cvt_ps2pi_SSE( __m128 a )
 {
     return _mm_cvt_ps2pi( a );
 }
+#endif
 
 /** \SSE{Native,_mm_cvtt_ss2si} */
 SSP_FORCEINLINE int ssp_cvtt_ss2si_SSE( __m128 a )
@@ -383,11 +385,13 @@ SSP_FORCEINLINE int ssp_cvtt_ss2si_SSE( __m128 a )
     return _mm_cvtt_ss2si( a );
 }
 
+#if defined(SYS32)
 /** \SSE{Native,_mm_cvtt_ps2pi} */
 SSP_FORCEINLINE __m64 ssp_cvtt_ps2pi_SSE( __m128 a )
 {
     return _mm_cvtt_ps2pi( a );
 }
+#endif
 
 /** \SSE{Native,_mm_cvt_si2ss} */
 SSP_FORCEINLINE __m128 ssp_cvt_si2ss_SSE( __m128 a, int imm )
@@ -395,11 +399,13 @@ SSP_FORCEINLINE __m128 ssp_cvt_si2ss_SSE( __m128 a, int imm )
     return _mm_cvt_si2ss( a, imm );
 }
 
+#if defined(SYS32)
 /** \SSE{Native,_mm_cvt_pi2ps} */
 SSP_FORCEINLINE __m128 ssp_cvt_pi2ps_SSE( __m128 a, __m64 b )
 {
     return _mm_cvt_pi2ps( a, b );
 }
+#endif
 //TODO: Write Ref implementation. Will only work on VS9 & GCC
 //SSP_FORCEINLINE float ssp_cvtss_f32_SSE( __m128 a )
 //{
@@ -497,6 +503,7 @@ SSP_FORCEINLINE int ssp_movemask_ps_SSE( __m128 a )
  * Integer extensions
  */
 
+#if defined(SYS32)
 /**\SSE{Native,_mm_pextrw} */
 SSP_FORCEINLINE int ssp_pextrw_SSE( __m64 a, int imm )
 {
@@ -583,6 +590,7 @@ SSP_FORCEINLINE __m64 ssp_psadbw_SSE( __m64 a, __m64 b )
 {
     return _m_psadbw( a, b );
 }
+#endif
 
 /*
  * memory & initialization
@@ -690,11 +698,13 @@ SSP_FORCEINLINE void ssp_prefetch_SSE( char *a, int sel )
     } 
 }
 
+#if defined(SYS32)
 /**\SSE{Native,_mm_stream_pi} */
 SSP_FORCEINLINE void ssp_stream_pi_SSE( __m64 *a,  __m64 b )
 {
     _mm_stream_pi( a,  b );
 }
+#endif
 
 /**\SSE{Native,_mm_stream_ps} */
 SSP_FORCEINLINE void ssp_stream_ps_SSE( float *a, __m128 b )
@@ -727,6 +737,7 @@ SSP_FORCEINLINE void ssp_setcsr_SSE( unsigned int a )
 }
 
 
+#if defined(SYS32)
 /**\SSE{Native,_mm_cvtpi16_ps} */
 SSP_FORCEINLINE __m128 ssp_cvtpi16_ps_SSE( __m64 a )
 {
@@ -768,6 +779,7 @@ SSP_FORCEINLINE __m128 ssp_cvtpi32x2_ps_SSE( __m64 a, __m64 b )
 {
     return _mm_cvtpi32x2_ps( a, b );
 }
+#endif
 
 //@}
 
