@@ -8,6 +8,10 @@
 #include "../SSEPlus_base.h"
 #include SSP_INCLUDE_FILE_SSE4a
 
+#ifndef _MSC_VER
+#include <x86intrin.h>
+#endif
+
 /** @addtogroup native_SSE4A  
  *  @{ 
  *  @name Native SSE4A Operations{
@@ -21,17 +25,19 @@ SSP_FORCEINLINE __m128i ssp_extract_si64_SSE4A( __m128i a ,__m128i b )
 /** \SSE4a{Native,_mm_extracti_si64} */ 
 SSP_FORCEINLINE __m128i ssp_extracti_si64_SSE4A( __m128i a, int len, int ndx )
 {
-    return _mm_extracti_si64( a, len, ndx );
+    //return _mm_extracti_si64( a, len, ndx );
+    return ssp_extracti_si64_REF( a, len, ndx );
 }
 /** \SSE4a{Native,_mm_insert_si64} */ 
 SSP_FORCEINLINE __m128i ssp_insert_si64_SSE4A( __m128i a, __m128i b )
 {
     return _mm_insert_si64( a, b );
 }
-/** \SSE4a{Native,_mm_inserti_si64} */ 
+/** \SSE4a{Native,_mm_inserti_si64} */
 SSP_FORCEINLINE __m128i ssp_inserti_si64_SSE4A( __m128i a, __m128i b, int len, int ndx )
 {
-    return _mm_inserti_si64( a, b, len, ndx );
+   //return _mm_inserti_si64( a, b, len, ndx );
+    return ssp_inserti_si64_REF( a, b, len, ndx );
 }
 /** \SSE4a{Native,_mm_stream_sd} */ 
 SSP_FORCEINLINE void ssp_stream_sd_SSE4A( double *dst ,__m128d src )
@@ -56,7 +62,11 @@ SSP_FORCEINLINE unsigned short ssp_lzcnt16_SSE4A( unsigned short val )
 */ 
 SSP_FORCEINLINE unsigned int ssp_lzcnt_SSE4A( unsigned int val )
 {
-    return __lzcnt( val );
+#ifdef _MSC_VER
+	return __lzcnt( val );
+#else
+	return __lzcnt32( val );
+#endif
 }
 
 #ifdef SYS64
@@ -70,19 +80,31 @@ SSP_FORCEINLINE ssp_u64 ssp_lzcnt64_SSE4A( ssp_u64 val )
 /** \SSE4a{Native,__popcnt16} */ 
 SSP_FORCEINLINE unsigned short ssp_popcnt16_SSE4A( unsigned short val )
 {
+#ifdef _MSC_VER
     return __popcnt16( val );
+#else
+    return __builtin_popcount( val );
+#endif
 }
 /** \SSE4a{Native,__popcnt} */ 
 SSP_FORCEINLINE unsigned int ssp_popcnt_SSE4A( unsigned int val )
 {
+#ifdef _MSC_VER
     return __popcnt( val );
+#else
+    return __builtin_popcountl( val );
+#endif
 }
 
 #ifdef SYS64
 /** \SSE4a{Native,__popcnt64} */ 
 SSP_FORCEINLINE ssp_u64 ssp_popcnt64_SSE4A( ssp_u64 val )
 {
+#ifdef _MSC_VER
     return __popcnt64( val );
+#else
+    return __builtin_popcountll( val );
+#endif
 }
 #endif
 

@@ -8,10 +8,14 @@
 #ifndef __SSEPLUS_PLATFORM_H__
 #define __SSEPLUS_PLATFORM_H__
 
-//TODO: Detect 32/64
+// Support for sized integers
+#include <stdint.h>
 
-
-
+#if defined(_M_X64) || defined(__x86_64__)
+#define SYS64
+#else
+#define SYS32
+#endif
 
 //---------------------------------------
 // Microsoft Visual Studio
@@ -94,10 +98,10 @@
 //#undef SSP_MSVC	
 
 #define SSP_CONST_SETR_8I( a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p ) \
-    { (__int8)(a), (__int8)(b), (__int8)(c), (__int8)(d), \
-      (__int8)(e), (__int8)(f), (__int8)(g), (__int8)(h), \
-      (__int8)(i), (__int8)(j), (__int8)(k), (__int8)(l), \
-      (__int8)(m), (__int8)(n), (__int8)(o), (__int8)(p) }
+    { (int8_t)(a), (int8_t)(b), (int8_t)(c), (int8_t)(d), \
+      (int8_t)(e), (int8_t)(f), (int8_t)(g), (int8_t)(h), \
+      (int8_t)(i), (int8_t)(j), (int8_t)(k), (int8_t)(l), \
+      (int8_t)(m), (int8_t)(n), (int8_t)(o), (int8_t)(p) }
 
 #define SSP_CONST_SET_8I( a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p ) \
     SSP_CONST_SETR_8I( (p), (o), (n), (m), (l), (k), (j), (i), (h), (g), (f), (e), (d), (c), (b), (a) )
@@ -109,7 +113,7 @@
     SSP_CONST_SET1_8I( 0 )
 
 #define __CNST16I28I_( x ) \
-    ((__int8)((x) & 0xFF)), ((__int8)(((x) >> 8) & 0xFF))
+    ((int8_t)((x) & 0xFF)), ((int8_t)(((x) >> 8) & 0xFF))
 
 #define SSP_CONST_SETR_16I( a, b, c, d, e, f, g, h ) \
     { __CNST16I28I_((a)), __CNST16I28I_((b)), __CNST16I28I_((c)), __CNST16I28I_((d)), __CNST16I28I_((e)), __CNST16I28I_((f)), __CNST16I28I_((g)), __CNST16I28I_((h)) }
@@ -124,7 +128,7 @@
     SSP_CONST_SETZERO_8I()
 
 #define __CNST32I28I_( x ) \
-    ((__int8)((x) & 0xFF)), ((__int8)(((x) >> 8) & 0xFF)), ((__int8)(((x) >> 16) & 0xFF)), ((__int8)(((x) >> 24) & 0xFF))
+    ((int8_t)((x) & 0xFF)), ((int8_t)(((x) >> 8) & 0xFF)), ((int8_t)(((x) >> 16) & 0xFF)), ((int8_t)(((x) >> 24) & 0xFF))
 
 #define SSP_CONST_SETR_32I( a, b, c, d ) \
     { __CNST32I28I_((a)), __CNST32I28I_((b)), __CNST32I28I_((c)), __CNST32I28I_((d)) }
@@ -139,7 +143,7 @@
     SSP_CONST_SETZERO_8I()
 
 #define __CNST64I28I_( x ) \
-    ((__int8)((x) & 0xFF)), ((__int8)(((x) >> 8) & 0xFF)), ((__int8)(((x) >> 16) & 0xFF)), ((__int8)(((x) >> 24) & 0xFF)), ((__int8)(((x) >> 32) & 0xFF)), ((__int8)(((x) >> 40) & 0xFF)), ((__int8)(((x) >> 48) & 0xFF)), ((__int8)(((x) >> 56) & 0xFF))
+    ((int8_t)((x) & 0xFF)), ((int8_t)(((x) >> 8) & 0xFF)), ((int8_t)(((x) >> 16) & 0xFF)), ((int8_t)(((x) >> 24) & 0xFF)), ((int8_t)(((x) >> 32) & 0xFF)), ((int8_t)(((x) >> 40) & 0xFF)), ((int8_t)(((x) >> 48) & 0xFF)), ((int8_t)(((x) >> 56) & 0xFF))
 
 #define SSP_CONST_SETR_64I( a, b ) \
     { __CNST64I28I_((a)), __CNST64I28I_((b)) }
@@ -194,10 +198,10 @@
  	(((d)&0xff)<<24) | (((c)&0xff)<<16) | (((b)&0xff)<<8) | ((a)&0xff) )
 
 #define SSP_CONST_SETR_8I( a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p ) \
-    { __CNST8TO64_( (ssp_s64)(a), (ssp_s64)(b), (ssp_s64)(c), (ssp_s64)(d), \
-                 (ssp_s64)(e), (ssp_s64)(f), (ssp_s64)(g), (ssp_s64)(h) ), \
-      __CNST8TO64_( (ssp_s64)(i), (ssp_s64)(j), (ssp_s64)(k), (ssp_s64)(l), \
-                 (ssp_s64)(m), (ssp_s64)(n), (ssp_s64)(o), (ssp_s64)(p) ) }
+    { (int64_t) __CNST8TO64_( (ssp_s64)(a), (ssp_s64)(b), (ssp_s64)(c), (ssp_s64)(d), \
+                              (ssp_s64)(e), (ssp_s64)(f), (ssp_s64)(g), (ssp_s64)(h) ), \
+      (int64_t) __CNST8TO64_( (ssp_s64)(i), (ssp_s64)(j), (ssp_s64)(k), (ssp_s64)(l), \
+                              (ssp_s64)(m), (ssp_s64)(n), (ssp_s64)(o), (ssp_s64)(p) ) }
 
 #define SSP_CONST_SET_8I( a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p ) \
     SSP_CONST_SETR_8I( (p), (o), (n), (m), (l), (k), (j), (i), (h), (g), (f), (e), (d), (c), (b), (a) )
@@ -214,10 +218,10 @@
 	( ((d)<<48) | (((c)&0xFFFF)<<32) | (((b)&0xFFFF)<<16) | ((a)&0xFFFF) )
 
 #define SSP_CONST_SETR_16I( a, b, c, d, e, f, g, h ) \
-    { __CNST16TO64_( (ssp_u64)(a), (ssp_u64)(b), \
-                     (ssp_u64)(c), (ssp_u64)(d) ), \
-      __CNST16TO64_( (ssp_u64)(e), (ssp_u64)(f), \
-                     (ssp_u64)(g), (ssp_u64)(h) ) }
+    { (int64_t) __CNST16TO64_( (ssp_u64)(a), (ssp_u64)(b), \
+                               (ssp_u64)(c), (ssp_u64)(d) ), \
+      (int64_t) __CNST16TO64_( (ssp_u64)(e), (ssp_u64)(f), \
+                               (ssp_u64)(g), (ssp_u64)(h) ) }
 
 #define SSP_CONST_SET_16I( a, b, c, d, e, f, g, h ) \
     SSP_CONST_SETR_16I( (h), (g), (f), (e), (d), (c), (b), (a) )
@@ -234,8 +238,8 @@
 	( ((b)<<32) | ((a) & 0xFFFFFFFF) )
 
 #define SSP_CONST_SETR_32I( a, b, c, d ) \
-    { __CNST32TO64_( (ssp_u64)(a), (ssp_u64)(b) ), \
-      __CNST32TO64_( (ssp_u64)(c), (ssp_u64)(d) ) }
+    { (int64_t) __CNST32TO64_( (ssp_u64)(a), (ssp_u64)(b) ), \
+      (int64_t) __CNST32TO64_( (ssp_u64)(c), (ssp_u64)(d) ) }
 
 #define SSP_CONST_SET_32I( a, b, c, d ) \
     SSP_CONST_SETR_32I( (d), (c), (b), (a) )
@@ -249,7 +253,7 @@
 // 64 bit integer types
 
 #define SSP_CONST_SETR_64I( a, b ) \
-    { (a), (b) }
+    { (int64_t)(a), (int64_t)(b) }
 
 #define SSP_CONST_SET_64I( a, b ) \
     SSP_CONST_SETR_64I( (b), (a) )
