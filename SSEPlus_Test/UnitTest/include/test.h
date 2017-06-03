@@ -6,8 +6,8 @@
 #define __TEST_H__
 
 #include "csvTable.h"
-#include "../../../SSEPlus/include/SSEPlus_platform.h"
-#include "../../../SSEPlus/include/SSEPlus_CPUID.h"
+#include "../../../SSEPlus/SSEPlus_platform.h"
+#include "../../../SSEPlus/SSEPlus_CPUID.h"
 #include <list>
 
 #if defined(SSP_MSVC)

@@ -5,7 +5,7 @@
 
 #include "../include/test.h" 
 #include "../include/csvTable.h" 
-#include "../../../SSEPlus/include/SSEPlus.h"
+#include "../../../SSEPlus/SSEPlus.h"
 
 // Decoder Table
 // 0 - REF      1 - SSE

@@ -5,8 +5,8 @@
 
 #include <stdio.h>
 
-#include "../../SSEPlus/include/SSEPlus.h"        // include every fn in library
-#include "../../SSEPlus/include/SSEPlus_REF.h"    // remaps to REF code path
+#include "../../SSEPlus/SSEPlus.h"        // include every fn in library
+#include "../../SSEPlus/SSEPlus_REF.h"    // remaps to REF code path
 
 int main()
 {
