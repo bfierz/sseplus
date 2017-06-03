@@ -535,8 +535,8 @@ void handle_illegal_instruction(int num)
 #endif
 
 void Setup_Paths( bool enable[ SSP_SSE_COUNT ],
-                  bool do_REF,   bool do_SSE,    bool do_SSE2,   bool do_SSE3,   bool do_SSSE3, 
-                  bool do_SSE4a, bool do_SSE4_1, bool do_SSE4_2, bool do_SSE5 )
+                  bool do_REF,   bool do_SSE,    bool do_SSE2,   bool do_SSE3,
+	              bool do_SSSE3, bool do_SSE4a, bool do_SSE4_1, bool do_SSE4_2 )
 { 
     enable[SSP_REF    ] = do_REF;
     enable[SSP_SSE    ] = do_SSE    && ssp_is_supported(SSP_SSE   );
@@ -546,13 +546,12 @@ void Setup_Paths( bool enable[ SSP_SSE_COUNT ],
     enable[SSP_SSE4a  ] = do_SSSE3  && ssp_is_supported(SSP_SSE4a );
     enable[SSP_SSE4_1 ] = do_SSE4_1 && ssp_is_supported(SSP_SSE4_1);
     enable[SSP_SSE4_2 ] = do_SSE4_2 && ssp_is_supported(SSP_SSE4_2);
-    enable[SSP_SSE5   ] = do_SSE5   && ssp_is_supported(SSP_SSE5  );
 }
 
 
 void Cleanup( double res[ SSP_SSE_COUNT ], std::string &errorList, const CSVLine & csv, 
-                  bool do_REF,   bool do_SSE,    bool do_SSE2,   bool do_SSE3,   bool do_SSSE3, 
-                  bool do_SSE4a, bool do_SSE4_1, bool do_SSE4_2, bool do_SSE5 )
+                  bool do_REF,   bool do_SSE,    bool do_SSE2,   bool do_SSE3,
+	              bool do_SSSE3, bool do_SSE4a, bool do_SSE4_1, bool do_SSE4_2 )
 {
     if     ( !do_REF                       ){ PrintSpace    ( csv.REF                  );} 
     else if( -1 == res[SSP_REF]            ){ PrintFail     ( csv.REF                  );}
@@ -601,12 +600,6 @@ void Cleanup( double res[ SSP_SSE_COUNT ], std::string &errorList, const CSVLine
     else if( -2 == res[SSP_SSE4_2]         ){ PrintException(csv.SSE4_2                );}
     else                                    { PrintResult   (csv.SSE4_2,res[SSP_SSE4_2]);} 
 
-    if     ( !do_SSE5                      ){ PrintSpace    (csv.SSE5                  );} 
-    else if( !ssp_is_supported(SSP_SSE5   )){ PrintDisabled (csv.SSE5                  );} 
-    else if( -1 == res[SSP_SSE5]           ){ PrintFail     (csv.SSE5                  );}
-    else if( -2 == res[SSP_SSE5]           ){ PrintException(csv.SSE5                  );}
-    else                                    { PrintResult   (csv.SSE5,res[SSP_SSE5]    );} 
-
     PrintErrors( errorList ); 
 }   
 
@@ -632,7 +625,6 @@ template<
     bool do_SSE4a ,TR(*fn_sse4a  )(T1,T2), 
     bool do_SSE4_1,TR(*fn_sse4_1 )(T1,T2), 
     bool do_SSE4_2,TR(*fn_sse4_2 )(T1,T2), 
-    bool do_SSE5  ,TR(*fn_sse5   )(T1,T2), 
     enumPrintFormat epf
 >
 void Test( const CSVLine & csv, const char *name, TEXP exp, T1 a, T2 b )
@@ -642,7 +634,7 @@ void Test( const CSVLine & csv, const char *name, TEXP exp, T1 a, T2 b )
     bool   enable[ SSP_SSE_COUNT ];
     double res   [ SSP_SSE_COUNT ], tmp;    // tmp indirection allows use of macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );      
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );      
     
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_ref    >( exp,a,b ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_sse    >( exp,a,b ) ); res[SSP_SSE   ]=tmp; } 
@@ -652,9 +644,8 @@ void Test( const CSVLine & csv, const char *name, TEXP exp, T1 a, T2 b )
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_sse4a  >( exp,a,b ) ); res[SSP_SSE4a ]=tmp; }
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_sse4_1 >( exp,a,b ) ); res[SSP_SSE4_1]=tmp; }
     if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_sse4_2 >( exp,a,b ) ); res[SSP_SSE4_2]=tmp; }
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<TEXP,T1,T2,TR,epf,fn_sse5   >( exp,a,b ) ); res[SSP_SSE5  ]=tmp; }
 
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 
@@ -672,7 +663,6 @@ template<
     bool do_SSE4a ,TR(*fn_sse4a  )(T1), 
     bool do_SSE4_1,TR(*fn_sse4_1 )(T1), 
     bool do_SSE4_2,TR(*fn_sse4_2 )(T1), 
-    bool do_SSE5  ,TR(*fn_sse5   )(T1), 
     enumPrintFormat epf
 >
 void Test( const CSVLine & csv, const char *name, TR exp, T1 a, __m128i expMask=_mm_set1_epi32(0xFFFFFFFF) )
@@ -686,7 +676,7 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, __m128i expMask=
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );      
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );      
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<TR,T1,epf,fn_ref    >( exp,a,expMask ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<TR,T1,epf,fn_sse    >( exp,a,expMask ) ); res[SSP_SSE   ]=tmp; } 
@@ -696,9 +686,8 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, __m128i expMask=
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<TR,T1,epf,fn_sse4a  >( exp,a,expMask ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<TR,T1,epf,fn_sse4_1 >( exp,a,expMask ) ); res[SSP_SSE4_1]=tmp; }  
     if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TR,T1,epf,fn_sse4_2 >( exp,a,expMask ) ); res[SSP_SSE4_2]=tmp; }  
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<TR,T1,epf,fn_sse5   >( exp,a,expMask ) ); res[SSP_SSE5  ]=tmp; }  
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //====================================
@@ -713,7 +702,6 @@ template<
     bool do_SSE4a ,TR (*fn_sse4a  )(T1,T2), 
     bool do_SSE4_1,TR (*fn_sse4_1 )(T1,T2), 
     bool do_SSE4_2,TR (*fn_sse4_2 )(T1,T2), 
-    bool do_SSE5  ,TR (*fn_sse5   )(T1,T2), 
     enumPrintFormat epf
 >
 void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, __m128i expMask=_mm_set1_epi32(0xFFFFFFFF) )
@@ -727,7 +715,7 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, __m128i ex
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_ref    >( exp,a,b,expMask ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_sse    >( exp,a,b,expMask ) ); res[SSP_SSE   ]=tmp; } 
@@ -737,9 +725,8 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, __m128i ex
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_sse4a  >( exp,a,b,expMask ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_sse4_1 >( exp,a,b,expMask ) ); res[SSP_SSE4_1]=tmp; } 
     if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_sse4_2 >( exp,a,b,expMask ) ); res[SSP_SSE4_2]=tmp; } 
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<TR,T1,T2,epf,fn_sse5   >( exp,a,b,expMask ) ); res[SSP_SSE5  ]=tmp; } 
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //====================================
@@ -753,8 +740,7 @@ template<
 	bool do_SSSE3 ,TR(*fn_ssse3  )(T1,T2,T3), 
     bool do_SSE4a ,TR(*fn_sse4a  )(T1,T2,T3), 
 	bool do_SSE4_1,TR(*fn_sse4_1 )(T1,T2,T3), 
-    bool do_SSE4_2,TR(*fn_sse4_2 )(T1,T2,T3), 
-    bool do_SSE5  ,TR(*fn_sse5   )(T1,T2,T3), 
+    bool do_SSE4_2,TR(*fn_sse4_2 )(T1,T2,T3),
     enumPrintFormat epf 
 >
 void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, __m128i expMask=_mm_set1_epi32(0xFFFFFFFF) )
@@ -768,7 +754,7 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, __m1
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_ref    >( exp,a,b,c,expMask ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse    >( exp,a,b,c,expMask ) ); res[SSP_SSE   ]=tmp; } 
@@ -777,10 +763,9 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, __m1
 	if( enable[SSP_SSSE3 ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_ssse3  >( exp,a,b,c,expMask ) ); res[SSP_SSSE3 ]=tmp; } 
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse4a  >( exp,a,b,c,expMask ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse4_1 >( exp,a,b,c,expMask ) ); res[SSP_SSE4_1]=tmp; } 
-    if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse4_2 >( exp,a,b,c,expMask ) ); res[SSP_SSE4_2]=tmp; } 
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse5   >( exp,a,b,c,expMask ) ); res[SSP_SSE5  ]=tmp; } 
+    if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TR,T1,T2,T3,epf,fn_sse4_2 >( exp,a,b,c,expMask ) ); res[SSP_SSE4_2]=tmp; }
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //====================================
@@ -795,7 +780,6 @@ template<
     bool do_SSE4a ,TR(*fn_sse4a  )(T1,T2,T3,T4), 
 	bool do_SSE4_1,TR(*fn_sse4_1 )(T1,T2,T3,T4), 
     bool do_SSE4_2,TR(*fn_sse4_2 )(T1,T2,T3,T4), 
-    bool do_SSE5  ,TR(*fn_sse5   )(T1,T2,T3,T4), 
     enumPrintFormat epf 
 >
 void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, T4 d, __m128i expMask=_mm_set1_epi32(0xFFFFFFFF) )
@@ -809,7 +793,7 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, T4 d
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_ref    >( exp,a,b,c,d,expMask ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_sse    >( exp,a,b,c,d,expMask ) ); res[SSP_SSE   ]=tmp; } 
@@ -819,9 +803,8 @@ void Test( const CSVLine & csv, const char *name, TR exp, T1 a, T2 b, T3 c, T4 d
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_sse4a  >( exp,a,b,c,d,expMask ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_sse4_1 >( exp,a,b,c,d,expMask ) ); res[SSP_SSE4_1]=tmp; } 
     if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_sse4_2 >( exp,a,b,c,d,expMask ) ); res[SSP_SSE4_2]=tmp; } 
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<TR,T1,T2,T3,T4,epf,fn_sse5   >( exp,a,b,c,d,expMask ) ); res[SSP_SSE5  ]=tmp; } 
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //
@@ -837,8 +820,7 @@ template<
 	bool do_SSSE3 ,void(*fn_ssse3  )(T1,T2,T3), 
     bool do_SSE4a ,void(*fn_sse4a  )(T1,T2,T3), 
 	bool do_SSE4_1,void(*fn_sse4_1 )(T1,T2,T3), 
-    bool do_SSE4_2,void(*fn_sse4_2 )(T1,T2,T3), 
-    bool do_SSE5  ,void(*fn_sse5   )(T1,T2,T3), 
+    bool do_SSE4_2,void(*fn_sse4_2 )(T1,T2,T3),
     enumPrintFormat epf 
 >
 void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp,
@@ -853,7 +835,7 @@ void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp,
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of TRY macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<epf,fn_ref    >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<epf,fn_sse    >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_SSE   ]=tmp; } 
@@ -863,9 +845,8 @@ void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp,
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<epf,fn_sse4a  >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<epf,fn_sse4_1 >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_SSE4_1]=tmp; } 
     if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<epf,fn_sse4_2 >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_SSE4_2]=tmp; } 
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<epf,fn_sse5   >( a_in,a_exp,b_in,b_exp,c_in,c_exp ) ); res[SSP_SSE5  ]=tmp; } 
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //====================================
@@ -880,7 +861,6 @@ template<
     bool do_SSE4a ,void(*fn_sse4a  )(T1,T2,T3,T4), 
 	bool do_SSE4_1,void(*fn_sse4_1 )(T1,T2,T3,T4), 
     bool do_SSE4_2,void(*fn_sse4_2 )(T1,T2,T3,T4), 
-    bool do_SSE5  ,void(*fn_sse5   )(T1,T2,T3,T4), 
     enumPrintFormat epf 
 >
 void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp, T4 d_exp,
@@ -895,7 +875,7 @@ void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp, 
     bool enable[ SSP_SSE_COUNT ];
     double res [ SSP_SSE_COUNT ], tmp;  // tmp indirection allows use of TRY macro
 
-    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Setup_Paths( enable, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 
     if( enable[SSP_REF   ] ){ TRY( tmp=p::Test<epf,fn_ref    >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_REF   ]=tmp; } 
     if( enable[SSP_SSE   ] ){ TRY( tmp=p::Test<epf,fn_sse    >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE   ]=tmp; } 
@@ -904,10 +884,9 @@ void Test( const CSVLine & csv, const char *name, T1 a_exp, T2 b_exp, T3 c_exp, 
 	if( enable[SSP_SSSE3 ] ){ TRY( tmp=p::Test<epf,fn_ssse3  >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSSE3 ]=tmp; } 
     if( enable[SSP_SSE4a ] ){ TRY( tmp=p::Test<epf,fn_sse4a  >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE4a ]=tmp; } 
     if( enable[SSP_SSE4_1] ){ TRY( tmp=p::Test<epf,fn_sse4_1 >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE4_1]=tmp; } 
-    if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<epf,fn_sse4_2 >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE4_2]=tmp; } 
-    if( enable[SSP_SSE5  ] ){ TRY( tmp=p::Test<epf,fn_sse5   >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE5  ]=tmp; } 
+    if( enable[SSP_SSE4_2] ){ TRY( tmp=p::Test<epf,fn_sse4_2 >( a_in,a_exp,b_in,b_exp,c_in,c_exp,d_in,d_exp ) ); res[SSP_SSE4_2]=tmp; }
     
-    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2, do_SSE5 );    
+    Cleanup( res, p::errorList, csv, do_REF, do_SSE, do_SSE2, do_SSE3, do_SSSE3, do_SSE4a, do_SSE4_1, do_SSE4_2 );    
 }
 
 //====================================

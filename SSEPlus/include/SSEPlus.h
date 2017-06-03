@@ -26,11 +26,6 @@
 
 #ifdef SSP_COMPILER_SUPPORTS_SSE42
 #include "SSEPlus_SSE4.2.h"
-#endif 
-
-#ifdef SSP_COMPILER_SUPPORTS_SSE5
-#include "SSEPlus_SSE5.h"
-#endif 
-
+#endif
 
 #endif // __SSEPLUS_H__

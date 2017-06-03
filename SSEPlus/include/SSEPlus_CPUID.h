@@ -25,7 +25,6 @@ typedef enum
     SSP_SSE4a,
     SSP_SSE4_1,
     SSP_SSE4_2,
-    SSP_SSE5,
     SSP_SSE_COUNT
 }ssp_cpu_feature;
 
@@ -63,7 +62,6 @@ ssp_cpuid ssp_get_cpuid()
         __cpuid( data, 0x80000001 );        
         
         cpu.feature[ SSP_SSE4a ] = (data[2] & 0x40  ) || 0;  // ECX: bit 6
-        cpu.feature[ SSP_SSE5  ] = (data[2] & 0x800 ) || 0;  // ECX: bit 11    
     }
    
     return cpu;    
